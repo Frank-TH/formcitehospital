@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
-public class SQLserver {
+public class SQLserver implements Idatabase {
 
     Connection conexion = null;
     private static SQLserver instancia;
@@ -57,51 +57,70 @@ public class SQLserver {
     public String ObtenerDato(String sql, byte columna) throws SQLException {
 
         String dato = "";
-        SQLserver.getInstancia();
-        st = (Statement) conexion.createStatement();
-        resultado = st.executeQuery(sql);
 
-        while (resultado.next()) {
-            dato = resultado.getString(columna);
+        try {
+            SQLserver.getInstancia();
+            st = (Statement) conexion.createStatement();
+            resultado = st.executeQuery(sql);
+
+            while (resultado.next()) {
+                dato = resultado.getString(columna);
+            }
+        } catch (SQLException e) {
         }
+
         return dato;
     }
 
     public ArrayList<String> PoblarComboBox(String sql) throws SQLException {
         ArrayList<String> datos = new ArrayList<>();
-        SQLserver.getInstancia();
-        st = (Statement) conexion.createStatement();
-        resultado = st.executeQuery(sql);
 
-        while (resultado.next()) {
-            datos.add(resultado.getString(1));
+        try {
+            SQLserver.getInstancia();
+            st = (Statement) conexion.createStatement();
+            resultado = st.executeQuery(sql);
+
+            while (resultado.next()) {
+                datos.add(resultado.getString(1));
+            }
+        } catch (SQLException e) {
         }
 
         return datos;
     }
 
-//Modificar las tablas    
+//Modelando la tabla medico 
     public void tablaMedico(DefaultTableModel model, String opcion) throws SQLException {
 
-        SQLserver.getInstancia();
-        String sql = "select m.codigo, m.nombre from medico m inner join especialidad e on m.especialidad = e.codigo where e.nombre = '" + opcion + "'";
-        st = (Statement) conexion.createStatement();
-        resultado = st.executeQuery(sql);
-        while (resultado.next()) {
-            Object[] fila = {resultado.getString(1), resultado.getString(2)};
-            model.addRow(fila);
+        try {
+            SQLserver.getInstancia();
+            String sql = "select m.codigo, m.nombre from medico m inner join especialidad e on m.especialidad = e.codigo where e.nombre = '" + opcion + "'";
+            st = (Statement) conexion.createStatement();
+            resultado = st.executeQuery(sql);
+            while (resultado.next()) {
+                Object[] fila = {resultado.getString(1), resultado.getString(2)};
+                model.addRow(fila);
+            }
+        } catch (SQLException e) {
         }
+
     }
 
+    //Modelando la tabla horario
     public void tablaHorario(DefaultTableModel model, String codigo) throws SQLException {
-        SQLserver.getInstancia();
-        String sql = "select h.dia, h.turno, h.intervalo from medico m inner join horario h on m.horario = h.codigo where m.codigo = '" + codigo + "'";
-        st = (Statement) conexion.createStatement();
-        resultado = st.executeQuery(sql);
-        while (resultado.next()) {
-            Object[] fila = {resultado.getString(1), resultado.getString(2), resultado.getString(3)};
-            model.addRow(fila);
+
+        try {
+            SQLserver.getInstancia();
+            String sql = "select h.dia, h.turno, h.intervalo from medico m inner join horario h on m.horario = h.codigo where m.codigo = '" + codigo + "'";
+            st = (Statement) conexion.createStatement();
+            resultado = st.executeQuery(sql);
+            while (resultado.next()) {
+                Object[] fila = {resultado.getString(1), resultado.getString(2), resultado.getString(3)};
+                model.addRow(fila);
+            }
+        } catch (SQLException e) {
         }
 
     }
+
 }

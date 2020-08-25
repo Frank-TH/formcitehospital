@@ -15,7 +15,7 @@ import repositorio.SQLserver;
 public class FormularioCitas extends javax.swing.JFrame {
 
     SQLserver conexion = SQLserver.getInstancia();
-
+    
     // Modelando las tablas 
     DefaultTableModel modeloTablaMedico, modeloTablaHorario;
     String headMedico[] = {"CODIGO", "MEDICO"};
